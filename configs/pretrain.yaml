@@ -1,0 +1,56 @@
+seed: 0
+dataset_configs:
+  name: 'scannet_dataset'
+  path: './data/ScanNet'
+  height: 256
+  width: 256
+  num_workers: 16
+  min_overlap: 0.4
+  pairs_per_scene: 100
+  batch_size: 20
+
+model_configs:
+  name: "ear_net_pretrain" # necessary
+
+  encoder: 
+    name: "PreActResNet18"
+
+  fusion:
+    name: 'CVFusion'
+    block: 1
+    feature_type_cv: 'layer3'
+    num_blocks_cv: [2, 2]
+    num_channels_cv: [256, 256]
+    dim_embedding_cv: 512
+
+  decoder:
+    rotation_mode: 'distribution'
+    rot_dec_channels: [512, 512]
+    out_dim: 360 # only applicable for distribution
+
+loss_configs:
+  name: "pretrain_loss" # necessary
+
+optimizer_configs:
+  name: "AdamW" # necessary
+  lr: 0.0001
+  betas: [0.9, 0.999]
+  weight_decay: 0.0
+    
+train_configs:
+  name: 'rel_rot_runner'
+  device: "cuda"
+  workspace: "experiments/pretrain"
+  enable_tensorboard: true
+  num_epochs: 50
+  resume: false
+  checkpoint_interval: 1
+  summary_freq: 50
+  val_interval: 1
+
+test_configs:
+  name: "runner"
+  device: "cuda"
+  split: "val"
+  workspace: "experiments/pretrain"
+  file_path: "result.yaml"

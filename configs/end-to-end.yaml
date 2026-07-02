@@ -1,0 +1,58 @@
+seed: 0
+dataset_configs:
+    name: 'multi_view_scannet_dataset'
+    path: './data/ScanNet'
+    list: './src/lists/scannet/'
+    num_workers: 12
+    batch_size: 8
+    size_tuple: [4, 1, 1, 7]
+model_configs:
+    name: "ear_net"
+    encoder:
+        name: "PreActResNet18"
+    fusion:
+        name: 'CVFusion'
+        block: 1
+        feature_type_cv: 'layer3'
+        num_blocks_cv: [2, 2]
+        num_channels_cv: [256, 256]
+        dim_embedding_cv: 512
+    decoder:
+        rotation_mode: 'distribution'
+        rot_dec_channels: [512, 512]
+        weight_dec_channels: [256, 256]
+        out_dim: 360
+    cara:
+        type: RotationSolver
+        cost_fun: 'L2'
+        sigma: 1
+        num_iters: 1
+        use_CAI: true
+        large_graph_inference: false
+    pretrained: "./experiments/pretrain/ckpt_0050.pth"
+loss_configs:
+    name: "e2e_loss"
+    type: "L2"
+    align: True
+optimizer_configs:
+    name: "AdamW"
+    lr: 0.0001
+    betas: [0.9, 0.999]
+    weight_decay: 0.0
+train_configs:
+    name: 'abs_rot_runner'
+    device: "cuda"
+    workspace: "./experiments/end-to-end"
+    enable_tensorboard: true
+    num_epochs: 50
+    resume: false
+    checkpoint_interval: 1
+    summary_freq: 50
+    val_interval: 1
+test_configs:
+    name: 'abs_rot_runner'
+    device: "cuda"
+    split: "val"
+    workspace: "./experiments/end-to-end/"
+    checkpoint: "ckpt_0050.pth"
+    file_path: "result.yaml"
