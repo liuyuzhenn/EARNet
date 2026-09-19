@@ -44,10 +44,14 @@ python test.py --configs configs/end-to-end.yaml
 ## Citation
 
 ```
-@article{liu2026earnet,
-  title={EAR-Net: Pursuing End-to-End Absolute Rotations from Multi-View Images},
-  author={Liu, Y. and Dong, Q.},
-  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence},
+@ARTICLE{11586175,
+  author={Liu, Yuzhen and Dong, Qiulei},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={EAR-Net: Pursuing End-to-End Absolute Rotations From Multi-View Images}, 
   year={2026},
+  volume={48},
+  number={10},
+  pages={13533-13548},
+  doi={10.1109/TPAMI.2026.3708244}
 }
 ```
